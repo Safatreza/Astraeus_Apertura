@@ -42,9 +42,9 @@ pytest-mock>=3.10.0
 sphinx>=6.2.0
 sphinx-rtd-theme>=1.2.0
 
-# Optional Simulation Backends
+# Simulation Backends
+pyaedt>=0.7.0  # ANSYS AEDT/HFSS integration
 # openems-python>=0.0.1  # Uncomment if using OpenEMS
-# pyaedt>=0.6.0  # Uncomment if using ANSYS AEDT/HFSS
 
 # Development Tools
 black>=23.3.0
