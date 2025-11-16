@@ -1,0 +1,24 @@
+# Communication Antenna Requirements Example
+# Ka-Band High-Throughput Satellite Communication
+
+mission_name: "Ka-Band HTS Downlink Antenna"
+mission_type: "communication"
+
+frequency:
+  center_frequency_ghz: 20.0
+  bandwidth_mhz: 500.0
+  frequency_band: "Ka"
+
+radiation_pattern:
+  gain_dbi: 32.0
+  beamwidth_azimuth_deg: 5.0
+  beamwidth_elevation_deg: 5.0
+  sidelobe_level_db: -20.0
+
+polarization: "circular_right"
+
+physical_constraints:
+  max_mass_kg: 3.0
+  max_length_m: 0.5
+  max_width_m: 0.5
+  max_height_m: 0.1
