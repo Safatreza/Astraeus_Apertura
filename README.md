@@ -7,8 +7,12 @@ A comprehensive AI-powered framework for collaborative antenna and radar system 
 ## 🌟 Features
 
 ### Core Capabilities
+- **Multi-Agent Orchestration** with OpenAI GPT and Anthropic Claude
+  - 16 agent variants (8 capabilities × 2 LLM providers)
+  - Intelligent routing, consensus mechanisms, and load balancing
+  - Automatic failover and cost optimization
 - **8 Specialized AI Agents** working collaboratively on antenna design
-- **LLM Integration** (OpenAI GPT, Anthropic Claude) for intelligent reasoning
+- **LLM Integration** (OpenAI GPT-4, Anthropic Claude 3.5 Sonnet) for intelligent reasoning
 - **Parallel Job Scheduling** for local and HPC cluster execution
 - **ANSYS HFSS Integration** for electromagnetic simulation
 - **Interactive Dashboard** for real-time design exploration
@@ -44,6 +48,12 @@ export NOTION_API_KEY='your-notion-key'
 ### Run Examples
 
 ```bash
+# Multi-agent orchestration (NEW!)
+python examples/multi_agent_orchestration.py
+
+# Agent benchmarking and comparison (NEW!)
+python examples/agent_benchmarking.py
+
 # Complete end-to-end workflow
 python examples/complete_workflow_demo.py
 
@@ -140,7 +150,62 @@ llm = create_llm(LLMConfig(provider=LLMProvider.OPENAI, model="gpt-4"))
 response = llm.generate("Analyze antenna requirements for LEO satellite...")
 ```
 
-### 3. Parallel Job Scheduling
+### 3. Multi-Agent Orchestration (NEW!)
+**Location**: `astraeus/orchestration/`
+
+Advanced orchestration system for hosting multiple agents from different LLM providers:
+
+**Key Features:**
+- **Agent Registry**: Discover and manage agents from OpenAI, Claude, and local models
+- **Agent Pools**: Execute tasks using various strategies (parallel, race, consensus)
+- **Consensus Engine**: Combine outputs using voting mechanisms (majority, weighted, unanimous)
+- **Intelligent Routing**: Route tasks based on cost, latency, quality, or task characteristics
+- **Agent Comparison**: Benchmark and compare agents across providers
+- **Automatic Failover**: Fallback to alternative agents on failure
+
+**Pool Strategies:**
+- `SINGLE_BEST`: Use best performing agent
+- `ALL_PARALLEL`: Execute on all agents in parallel
+- `RACE`: Use first successful response
+- `MAJORITY_VOTE`: Consensus from multiple agents
+
+**Voting Strategies:**
+- `MAJORITY`: Simple majority vote
+- `WEIGHTED`: Weighted by reliability/confidence
+- `UNANIMOUS`: Require all agents to agree
+- `MEDIAN/AVERAGE`: For numerical results
+
+Example:
+```python
+from astraeus.orchestration import MultiAgentExecutor, MultiAgentConfig
+from astraeus.orchestration.agent_factory import register_all_agents
+from astraeus.orchestration.agent_pool import PoolStrategy
+from astraeus.orchestration.consensus import VotingStrategy
+
+# Register all agents (OpenAI + Claude variants)
+register_all_agents()
+
+# Create executor with consensus
+config = MultiAgentConfig(
+    pool_strategy=PoolStrategy.ALL_PARALLEL,
+    voting_strategy=VotingStrategy.WEIGHTED,
+)
+executor = MultiAgentExecutor(config=config)
+
+# Execute with consensus from multiple agents
+result = executor.execute(
+    capability=AgentCapability.REQUIREMENTS_ANALYSIS,
+    message=message,
+    use_consensus=True,
+)
+
+print(f"Confidence: {result.consensus_result.confidence:.2f}")
+print(f"Agreement: {result.consensus_result.agreement_level:.1%}")
+```
+
+See `MULTI_AGENT_ARCHITECTURE.md` for complete documentation.
+
+### 4. Parallel Job Scheduling
 **Location**: `astraeus/scheduling/`
 
 Production-ready job scheduling system:
@@ -161,7 +226,7 @@ pool.register_executor('simulation', my_simulator)
 pool.start()
 ```
 
-### 4. ANSYS HFSS Simulation
+### 5. ANSYS HFSS Simulation
 **Location**: `astraeus/simulation/backends/`
 
 Full electromagnetic simulation integration:
@@ -180,7 +245,7 @@ sim = AnsysHFSSSimulator()
 results = sim.run_simulation(frequency_ghz=10.0, geometry={...})
 ```
 
-### 5. Interactive Visualization
+### 6. Interactive Visualization
 **Location**: `astraeus/visualization/`
 
 Web-based interactive dashboards:
