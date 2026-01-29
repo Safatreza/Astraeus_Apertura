@@ -1,112 +1,92 @@
-Systems Engineering Automator
-Overview
+# Astraeus Apertura — Agentic Methods Definition
 
-The Systems Engineering Automator is a structured, agent-based framework designed to support end-to-end systems engineering workflows for complex technical systems. Its primary goal is to reduce manual effort and improve consistency when generating and maintaining core systems engineering artifacts such as requirements structures, product and work breakdowns, dependency maps, and execution timelines.
+## Theoretical Foundation
 
-The framework focuses on engineering logic and traceability, rather than autonomous design or optimization, and is intended to support iterative projects where system definitions evolve over time.
+### Core Model: ReAct (Reason + Act)
 
-Motivation
+Our agentic methodology is grounded in the **ReAct paradigm** (Yao et al., 2022), which interleaves reasoning traces with task-specific actions in a synergistic loop:
 
-In many engineering projects, systems engineering activities are still performed manually using document-centric workflows. As system complexity increases, this often leads to:
+```
+Thought → Action → Observation → Thought → Action → ...
+```
 
-high coordination overhead,
+ReAct agents generate verbal reasoning to track progress, handle exceptions, and decide what action to take next—then observe the result and continue. This contrasts with one-shot generation where a model produces a final answer without intermediate steps.
 
-inconsistent artifacts across iterations,
+**Why ReAct for systems engineering:**
+- Explicit reasoning traces make design decisions auditable
+- Action-observation loops enable iterative refinement as requirements evolve
+- Tool use (actions) maps naturally to artifact transformations (requirements → PBS → WBS)
 
-loss of traceability between requirements, system structure, and planning.
+### Architecture Taxonomy: Masterman et al. (2024)
 
-The Systems Engineering Automator was developed to address these challenges by formalizing systems engineering artifacts and applying agentic workflows to generate, transform, and update them in a consistent and repeatable manner.
+We adopt the broader agent architecture taxonomy from Masterman et al. (2024), which categorizes agentic systems along key dimensions:
 
-Core Idea
+| Dimension | Our Approach |
+|-----------|--------------|
+| **Single vs. Multi-Agent** | Multi-agent with specialized roles (requirements analyst, decomposition agent, scheduling agent) |
+| **Planning Strategy** | Hierarchical decomposition with iterative re-planning |
+| **Tool Calling** | Schema-defined tools for artifact CRUD operations |
+| **Memory** | Persistent artifact store as external memory |
 
-The central idea of the framework is that systems engineering artifacts can be treated as structured data objects rather than static documents. By representing requirements, breakdown structures, dependencies, and timelines explicitly, it becomes possible to:
+---
 
-propagate changes across artifacts,
+## What Our Agentic Methods Achieve
 
-regenerate planning views automatically,
+### 1. Structured Artifact Generation
+Turn mission inputs into structured SE artifacts in a repeatable way:
+```
+Requirements → PBS → WBS → Dependencies → Timeline
+```
 
-maintain traceability across iterations.
+### 2. Cross-Artifact Consistency
+Maintain consistency across artifacts when assumptions or requirements change. No "PBS says X but WBS says Y" drift.
 
-Agentic workflows are used to orchestrate these transformations in a step-by-step, auditable process.
+### 3. Auditable Reasoning
+Make reasoning auditable by keeping intermediate states/artifacts. Outputs are reviewable, not magic black-box results.
 
-Scope
+### 4. Rapid Iteration Support
+Support iteration: regenerate updated artifacts quickly as Project-S evolves (ATLAS-III → ATLAS-IV/V).
 
-The Systems Engineering Automator is intended to support:
+> Conceptually, this aligns with tool-using, iterative Reason–Act loops rather than one-shot generation.
 
-Mission and system requirements structuring
+---
 
-Product Breakdown Structure (PBS) generation
+## AWS Deployment Feasibility
 
-Work Breakdown Structure (WBS) generation with defined work packages
+**Yes** — the "agentic" part (orchestration + tool calls + state) maps cleanly to AWS patterns:
 
-Dependency modeling between work packages
+- **Amazon Bedrock Agents** supports a default ReAct-style orchestration strategy and allows custom orchestration configuration
 
-Execution timeline synthesis based on dependencies
+- **Custom Orchestration via Lambda** — for tighter control, Bedrock supports custom orchestration through AWS Lambda functions where you decide how the agent plans steps, calls tools/actions, and terminates
 
-The framework does not aim to:
+- **AWS Step Functions** — for multi-step workflows and multi-agent routing, Step Functions orchestrate sequence/parallelism around Bedrock calls and tool invocations
 
-perform detailed subsystem design,
+- **Tool-Based Agent Pattern** — AWS documents the general pattern of agents invoking functions/tools with schemas and guardrails, matching our "artifact transformation pipeline" style
 
-replace engineering judgment,
+- **State & Logging** — S3/RDS for artifact persistence, CloudWatch for reasoning trace logging and observability
 
-autonomously optimize hardware designs.
+### Deployment Architecture (Summary)
 
-Architecture Concept
+```
+┌─────────────────────────────────────────────────────────────────┐
+│                        AWS Deployment                           │
+├─────────────────────────────────────────────────────────────────┤
+│  Bedrock (model + agent)                                        │
+│       ↓                                                         │
+│  Lambda (tools / actions / custom orchestrator)                 │
+│       ↓                                                         │
+│  Step Functions (workflow orchestration)                        │
+│       ↓                                                         │
+│  S3 / RDS (artifact storage)                                    │
+│       ↓                                                         │
+│  CloudWatch (logging + observability)                           │
+└─────────────────────────────────────────────────────────────────┘
+```
 
-At a high level, the framework follows a sequential but iterative workflow:
+---
 
-Input ingestion
-Mission objectives, constraints, and source documents are ingested and converted into structured representations.
+## References
 
-Requirements structuring
-Requirements are extracted, classified, and organized into a consistent requirements baseline.
+- Yao, S., Zhao, J., Yu, D., Du, N., Shafran, I., Narasimhan, K., & Cao, Y. (2022). *ReAct: Synergizing Reasoning and Acting in Language Models.* arXiv:2210.03629
 
-System decomposition
-A Product Breakdown Structure (PBS) is generated to represent the system architecture.
-
-Work decomposition
-A Work Breakdown Structure (WBS) is derived from the PBS, with clearly defined work packages.
-
-Dependency modeling
-Technical, programmatic, and external dependencies between work packages are identified and represented explicitly.
-
-Planning synthesis
-A feasible execution timeline is generated based on the dependency relationships.
-
-Each step produces an artifact that becomes the input to the next, enabling traceability and iteration.
-
-Agentic Workflow
-
-The framework uses agentic workflows in a task-oriented sense:
-
-each agent is responsible for a well-defined transformation (e.g. requirements → PBS),
-
-agents operate on structured inputs and produce structured outputs,
-
-human review and correction are supported at each stage.
-
-This approach allows partial automation while keeping engineering decisions transparent and reviewable.
-
-Intended Use
-
-The Systems Engineering Automator is designed for:
-
-early and mid-stage systems engineering,
-
-radar-centric satellite missions and similar complex systems,
-
-iterative project environments with recurring system updates.
-
-The framework is particularly useful when the same systems engineering workflow must be repeated across multiple project iterations.
-
-Relation to Other Work
-
-This project focuses on systems engineering automation and artifact generation. It complements, but is distinct from, ongoing work on multi-agent autonomous design frameworks (e.g. antenna and radar design automation), which address detailed design and optimization problems.
-
-Status
-
-The Systems Engineering Automator is a working research and engineering prototype. Core systems engineering functionality (requirements structuring, PBS/WBS generation, dependency modeling, and planning) is operational and has been applied in a real project context. Further extensions are under active development.
-
-Disclaimer
-
-This framework is intended to support systems engineering activities, not to replace engineering judgment. All generated artifacts are expected to be reviewed and validated by engineers.
+- Masterman, T., Besen, S., Sawtell, M., & Chao, A. (2024). *The Landscape of Emerging AI Agent Architectures for Reasoning, Planning, and Tool Calling: A Survey.* arXiv:2404.11584
