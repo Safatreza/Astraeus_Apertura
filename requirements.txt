@@ -1,0 +1,38 @@
+# Astraeus Apertura - Dependencies
+# Python 3.10+ required
+
+# Core data modeling
+pydantic>=2.0.0,<3.0.0
+
+# Graph operations for dependency analysis
+networkx>=3.0
+
+# Date/time handling
+python-dateutil>=2.8.0
+
+# Testing
+pytest>=7.0.0
+pytest-cov>=4.0.0
+
+# Type checking
+mypy>=1.0.0
+
+# Code formatting
+black>=23.0.0
+isort>=5.12.0
+
+# Documentation
+mkdocs>=1.5.0
+mkdocs-material>=9.0.0
+
+# Visualization (optional)
+matplotlib>=3.7.0
+
+# JSON schema validation
+jsonschema>=4.17.0
+
+# Rich console output
+rich>=13.0.0
+
+# YAML support
+pyyaml>=6.0

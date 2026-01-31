@@ -1,0 +1,56 @@
+{
+  "mission_name": "ATLAS-III",
+  "launch_target": "2026-10-01",
+  "primary_objective": "Debris detection via radar for space situational awareness",
+  "mission_type": "Technology Demonstration",
+  "orbit": {
+    "type": "LEO",
+    "altitude_km": 500,
+    "inclination_deg": 97.4
+  },
+  "constraints": {
+    "form_factor": "6U CubeSat",
+    "mass_budget_kg": 12,
+    "power_budget_w": 40,
+    "data_rate_mbps": 100,
+    "mission_lifetime_months": 24,
+    "cost_cap_usd": 5000000
+  },
+  "payload_requirements": [
+    "Detect debris objects with radar cross-section >= 10cm² at 500km range",
+    "Radar operation in X-band (9.5-10.5 GHz) frequency",
+    "Onboard signal processing capability for real-time detection",
+    "Data downlink via S-band TT&C subsystem",
+    "Minimum 4 radar observation passes per day",
+    "Target tracking accuracy of 100m position, 10m/s velocity"
+  ],
+  "operational_requirements": [
+    "Autonomous operation capability for up to 48 hours",
+    "Ground station contact minimum twice per day",
+    "Payload duty cycle of 20% maximum",
+    "Data storage for minimum 24 hours of observations"
+  ],
+  "environmental_requirements": [
+    "Operate in LEO radiation environment",
+    "Thermal operating range -20°C to +50°C",
+    "Survive launch vibration loads per GEVS",
+    "Withstand atomic oxygen exposure"
+  ],
+  "interface_requirements": [
+    "Compatible with standard CubeSat deployer (6U)",
+    "Power interface via spacecraft bus 28V unregulated",
+    "Data interface via SpaceWire or CAN bus",
+    "RF interface via SMA connectors"
+  ],
+  "stakeholders": [
+    "Space Agency (primary customer)",
+    "University Research Team (payload development)",
+    "CubeSat Bus Provider (platform integration)"
+  ],
+  "key_performance_indicators": {
+    "detection_probability": 0.95,
+    "false_alarm_rate": 0.01,
+    "observation_availability": 0.90,
+    "data_latency_hours": 6
+  }
+}
